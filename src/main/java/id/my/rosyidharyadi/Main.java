@@ -20,7 +20,7 @@ public class Main {
         JFrame frame = new JFrame("Grid Draw");
         frame.add(display);
         frame.setSize(800, 440);
-        int[][] newGrid = new int[DISPLAY_HEIGHT][DISPLAY_WIDE];
+        byte[][] newGrid = new byte[DISPLAY_HEIGHT][DISPLAY_WIDE];
         for (int i = 0; i < DISPLAY_HEIGHT; i++) {
             for (int j = 0; j < DISPLAY_WIDE; j++) {
                 // ngetest doang su
@@ -29,7 +29,7 @@ public class Main {
                 }
             }
         }
-        display.setGrid(newGrid); // update the grid with the new array
+        display.setDataArray(newGrid); // update the grid with the new array
 
 
         frame.setVisible(true);

@@ -4,14 +4,14 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 public class Display extends JPanel {
-    private int[][] grid;
+    private byte[][] dataArray;
 
     public Display(int numRows, int numCols) {
-        this.grid = new int[numRows][numCols];
+        this.dataArray = new byte[numRows][numCols];
     }
 
-    public void setGrid(int[][] grid) {
-        this.grid = grid;
+    public void setDataArray(byte[][] dataArray) {
+        this.dataArray = dataArray;
         repaint(); // redraw the panel with the new grid
     }
 
@@ -19,8 +19,8 @@ public class Display extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int numRows = grid.length;
-        int numCols = grid[0].length;
+        int numRows = dataArray.length;
+        int numCols = dataArray[0].length;
 
         // Calculate the size of each square based on the panel size and grid dimensions
         int squareSize = (int) Math.min((double) getWidth() / numCols, (double) getHeight() / numRows);
@@ -30,7 +30,7 @@ public class Display extends JPanel {
                 int x = j * squareSize;
                 int y = i * squareSize;
 
-                if (grid[i][j] == 0) {
+                if (dataArray[i][j] == 0) {
                     g.setColor(Color.BLACK);
                 } else {
                     g.setColor(Color.WHITE);
@@ -43,8 +43,8 @@ public class Display extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        int numRows = grid.length;
-        int numCols = grid[0].length;
+        int numRows = dataArray.length;
+        int numCols = dataArray[0].length;
         int squareSize = 20; // Default square size
         return new Dimension(numCols * squareSize, numRows * squareSize);
     }
