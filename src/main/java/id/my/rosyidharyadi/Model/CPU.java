@@ -84,7 +84,8 @@ public class CPU {
     }
 
     private void setGraphicBuffer(byte data, int posX, int posY) {
-        int flattenedIndex = (posX - 1) * DISPLAY_ROW_NUM + posY;
+        int flattenedIndex = (posX * DISPLAY_ROW_NUM) + posY;
+        graphicBuffer[flattenedIndex] = data;
     }
 
     public byte[] getGraphicBuffer() {

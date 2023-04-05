@@ -9,12 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-//        int[][] grid = {
-//                {0, 0, 1, 0, 1},
-//                {1, 0, 0, 1, 0},
-//                {0, 1, 1, 0, 1},
-//                {1, 0, 1, 0, 0}
-//        };
 
         Display display = new Display(DISPLAY_ROW_NUM, DISPLAY_COL_NUM);
 
