@@ -56,7 +56,9 @@ public class CPU {
 
 
     public void run() {
-        // gw masih bingung enaknya gimana
+        // One step run (what's the proper term for this?)
+        short opcode = fetch();
+        decodeExecute(opcode);
     }
 
 
@@ -74,7 +76,16 @@ public class CPU {
         }
     }
 
-    public void execute(short opcode) {
+
+    private short fetch() {
+        // Get opcode (2 bytes) from memory
+        byte hi = memory[programCounter];
+        byte lo = memory[programCounter + 1];
+        programCounter += 2;
+        return (short) (((hi & 0xFF) << 8) | (lo & 0xFF));
+    }
+
+    private void decodeExecute(short opcode) {
         int opcodeClass = opcode & 0xF000;
         byte opcodeArg = (byte) (opcode & 0x0FFF);
         switch (opcodeClass) {
@@ -83,6 +94,9 @@ public class CPU {
                 break;
             case 0x1000:
                 op1(opcodeArg);
+                break;
+            case 0x6000:
+                op6(opcodeArg);
                 break;
         }
     }
@@ -98,8 +112,15 @@ public class CPU {
         }
     }
 
-    private void op1(byte arg) {
+    private void op6(byte arg) {
+        // Set Vx register
+        int x = arg & 0x0F00;
+        byte val = (byte) (arg & 0x00FF);
+        vRegister[x] = val;
+    }
 
+    private void op1(byte arg) {
+        programCounter = arg;
     }
 
 
