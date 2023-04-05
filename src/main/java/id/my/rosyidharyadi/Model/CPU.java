@@ -48,9 +48,10 @@ public class CPU {
                 0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
                 0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         };
-        for (short i = 0; i < fontInt.length; i++) {
+        for (int i = 0; i < fontInt.length; i++) {
             font[i] = (byte) fontInt[i];
         }
+        loadFont();
     }
 
 
