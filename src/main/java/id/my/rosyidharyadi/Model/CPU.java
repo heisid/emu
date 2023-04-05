@@ -1,28 +1,28 @@
 package id.my.rosyidharyadi.Model;
 
+import static id.my.rosyidharyadi.Constant.*;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CPU {
-    private byte[] memory = new byte[4096];
+    private byte[] memory = new byte[MEMORY_SIZE];
     private short MEM_START = 0x200;
 
-    private byte[] vRegister = new byte[16];
+    private byte[] vRegister = new byte[V_REGISTER_SIZE];
     private short indexRegister;
     private short programCounter;
 
-    private short[] stack = new short[16];
+    private short[] stack = new short[STACK_SIZE];
     private byte stackPointer;
 
     private byte delayTimer;
     private byte soundTimer;
-    private int FONT_LENGTH = 16;
-    private short FONT_ADDR_START = 0x50;
     private byte[] font = new byte[FONT_LENGTH];
 
-    private byte[] graphicBuffer = new byte[64 * 32]; // todo: this is not cool
+    private byte[] graphicBuffer = new byte[DISPLAY_ROW_NUM * DISPLAY_COL_NUM];
 
 
     public CPU() {
@@ -76,6 +76,15 @@ public class CPU {
 
     public void execute(byte opcode) {
 
+    }
+
+
+    private void setGraphicBuffer(byte[] data) {
+        System.arraycopy(data, 0, graphicBuffer, 0, graphicBuffer.length);
+    }
+
+    private void setGraphicBuffer(byte data, int posX, int posY) {
+        int flattenedIndex = (posX - 1) * DISPLAY_ROW_NUM + posY;
     }
 
     public byte[] getGraphicBuffer() {
