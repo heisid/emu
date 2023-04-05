@@ -87,40 +87,50 @@ public class CPU {
 
     private void decodeExecute(short opcode) {
         int opcodeClass = opcode & 0xF000;
-        byte opcodeArg = (byte) (opcode & 0x0FFF);
+        short opcodeArg = (short) (opcode & 0x0FFF);
         switch (opcodeClass) {
-            case 0x0000:
-                op0(opcodeArg);
-                break;
-            case 0x1000:
-                op1(opcodeArg);
-                break;
-            case 0x6000:
-                op6(opcodeArg);
-                break;
+            case 0x0000 -> op0(opcodeArg);
+            case 0x1000 -> op1(opcodeArg);
+            case 0x6000 -> op6(opcodeArg);
+            case 0x7000 -> op7(opcodeArg);
+            case 0xA000 -> opA(opcodeArg);
         }
     }
 
-    private void op0(byte arg) {
-        if (arg == (byte)0x0E0) {
+    private void op0(short arg) {
+        if (arg == (short)0x0E0) {
             // Clear screen
             Arrays.fill(graphicBuffer, 0, graphicBuffer.length, (byte) 0);
-        } else if (arg == (byte)0x0EE) {
+        } else if (arg == (short)0x0EE) {
             // Return from subroutine
             --stackPointer;
             programCounter = stack[stackPointer];
         }
     }
 
-    private void op6(byte arg) {
+    private void op1(short arg) {
+        programCounter = arg;
+    }
+
+    private void op6(short arg) {
         // Set Vx register
         int x = arg & 0x0F00;
         byte val = (byte) (arg & 0x00FF);
         vRegister[x] = val;
     }
 
-    private void op1(byte arg) {
-        programCounter = arg;
+
+    private void op7(short arg) {
+        // Add n to register Vx
+        int x = arg & 0x0F00;
+        byte nn = (byte) (arg & 0x00FF);
+        vRegister[x] += nn;
+    }
+
+
+    private void opA(short arg) {
+        // Set index register
+        indexRegister = (short) (arg & 0x0FFF);
     }
 
 
