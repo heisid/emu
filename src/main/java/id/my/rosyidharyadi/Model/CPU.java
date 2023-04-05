@@ -74,12 +74,15 @@ public class CPU {
         }
     }
 
-    public void execute(byte opcode) {
-        byte opcodeClass = (byte) (opcode & 0xF000);
+    public void execute(short opcode) {
+        int opcodeClass = opcode & 0xF000;
         byte opcodeArg = (byte) (opcode & 0x0FFF);
         switch (opcodeClass) {
-            case (byte)0x000:
+            case 0x0000:
                 op0(opcodeArg);
+                break;
+            case 0x1000:
+                op1(opcodeArg);
                 break;
         }
     }
@@ -93,6 +96,10 @@ public class CPU {
             --stackPointer;
             programCounter = stack[stackPointer];
         }
+    }
+
+    private void op1(byte arg) {
+
     }
 
 
