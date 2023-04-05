@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class CPU {
     private byte[] memory = new byte[MEMORY_SIZE];
@@ -73,7 +74,24 @@ public class CPU {
     }
 
     public void execute(byte opcode) {
+        byte opcodeClass = (byte) (opcode & 0xF000);
+        byte opcodeArg = (byte) (opcode & 0x0FFF);
+        switch (opcodeClass) {
+            case (byte)0x000:
+                op0(opcodeArg);
+                break;
+        }
+    }
 
+    private void op0(byte arg) {
+        if (arg == (byte)0x0E0) {
+            // Clear screen
+            Arrays.fill(graphicBuffer, 0, graphicBuffer.length, (byte) 0);
+        } else if (arg == (byte)0x0EE) {
+            // Return from subroutine
+            --stackPointer;
+            programCounter = stack[stackPointer];
+        }
     }
 
 
