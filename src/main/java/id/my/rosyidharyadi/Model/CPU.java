@@ -9,8 +9,6 @@ import java.nio.file.Paths;
 
 public class CPU {
     private byte[] memory = new byte[MEMORY_SIZE];
-    private short MEM_START = 0x200;
-
     private byte[] vRegister = new byte[V_REGISTER_SIZE];
     private short indexRegister;
     private short programCounter;
@@ -27,7 +25,7 @@ public class CPU {
 
     public CPU() {
         indexRegister = 0x000;
-        programCounter = MEM_START;
+        programCounter = MEMORY_START;
         stackPointer = 0x00;
         delayTimer = 0x00;
         soundTimer = 0x00;
@@ -63,7 +61,7 @@ public class CPU {
     public void loadROM(String romFileName) throws IOException {
         Path path = Paths.get(romFileName);
         byte[] fileData = Files.readAllBytes(path);
-        for (short i = MEM_START; i < (fileData.length + MEM_START); i++) {
+        for (short i = MEMORY_START; i < (fileData.length + MEMORY_START); i++) {
             memory[i] = fileData[i - 0x200];
         }
     }
