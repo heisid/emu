@@ -134,6 +134,18 @@ public class CPU {
     }
 
 
+    private void opD(short arg) {
+        // Draw
+        int x = (arg & 0x0F00) >> 8;
+        int y = (arg & 0x00F0) >> 4;
+        int n = (arg & 0x000F);
+        byte posX = (byte) (vRegister[x] & (DISPLAY_ROW_NUM - 1)); // modulo 64, initial position is wrapped
+        byte posY = (byte) (vRegister[y] & (DISPLAY_COL_NUM - 1)); // mod 32
+        vRegister[0xF] = 0;
+
+    }
+
+
     private void setGraphicBuffer(byte[] data) {
         System.arraycopy(data, 0, graphicBuffer, 0, graphicBuffer.length);
     }

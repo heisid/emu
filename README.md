@@ -9,6 +9,7 @@ Maybe Python is easier and I'm more familiar with. Or Rust will be faster, but w
 I don't even know where I can get CHIP-8 ROM to test this project.
 
 ## Resources:
+- https://tobiasvl.github.io/blog/write-a-chip-8-emulator
 - http://www.cs.columbia.edu/~sedwards/classes/2016/4840-spring/designs/Chip8.pdf
 
 Rosyid Ganteng.
