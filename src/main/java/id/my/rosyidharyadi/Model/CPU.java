@@ -136,13 +136,26 @@ public class CPU {
 
     private void opD(short arg) {
         // Draw
+        // todo: better variable name
         int x = (arg & 0x0F00) >> 8;
         int y = (arg & 0x00F0) >> 4;
         int n = (arg & 0x000F);
-        byte posX = (byte) (vRegister[x] & (DISPLAY_ROW_NUM - 1)); // modulo 64, initial position is wrapped
-        byte posY = (byte) (vRegister[y] & (DISPLAY_COL_NUM - 1)); // mod 32
+        int posX = vRegister[x] & (DISPLAY_ROW_NUM - 1); // modulo 64, initial position is wrapped
+        int posY = vRegister[y] & (DISPLAY_COL_NUM - 1); // mod 32
         vRegister[0xF] = 0;
-
+        for (int i = posX; i < Math.min(posX + n, DISPLAY_ROW_NUM); i++) {
+            byte spriteRow = memory[indexRegister + (i - posX)];
+            for (int j = posY; j < Math.min(posY + 8, DISPLAY_COL_NUM); j++) {
+                int graphicBufferPixel = graphicBuffer[((i - 1) * DISPLAY_COL_NUM) + j];
+                int spritePixel = (spriteRow >> j) & 1; // sprite pixel di row i, bit ke-j
+                if (graphicBufferPixel == 1 && spritePixel == 1) {
+                    graphicBufferPixel = 0;
+                    vRegister[0xF] = (byte) 1;
+                }
+                // balikin
+                graphicBuffer[((i - 1) * DISPLAY_COL_NUM) + j] = (byte) graphicBufferPixel;
+            }
+        }
     }
 
 
