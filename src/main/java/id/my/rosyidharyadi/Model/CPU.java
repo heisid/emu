@@ -19,7 +19,7 @@ public class CPU {
 
     private byte delayTimer;
     private byte soundTimer;
-    private byte[] font = new byte[FONT_LENGTH];
+    private byte[] font = new byte[FONT_LENGTH * FONT_HEIGHT];
 
     private byte[] graphicBuffer = new byte[DISPLAY_ROW_NUM * DISPLAY_COL_NUM];
 
@@ -146,18 +146,19 @@ public class CPU {
         for (int i = posX; i < Math.min(posX + n, DISPLAY_ROW_NUM); i++) {
             byte spriteRow = memory[indexRegister + (i - posX)];
             for (int j = posY; j < Math.min(posY + 8, DISPLAY_COL_NUM); j++) {
-                int graphicBufferPixel = graphicBuffer[((i - 1) * DISPLAY_COL_NUM) + j];
                 int spritePixel = (spriteRow >> j) & 1; // sprite pixel di row i, bit ke-j
-                if (graphicBufferPixel == 1 && spritePixel == 1) {
-                    graphicBufferPixel = 0;
+                if (getGraphicBufferAt(i, j) == 1 && spritePixel == 1) {
+                    setGraphicBuffer((byte)0, i, j);
                     vRegister[0xF] = (byte) 1;
                 }
-                // balikin
-                graphicBuffer[((i - 1) * DISPLAY_COL_NUM) + j] = (byte) graphicBufferPixel;
             }
         }
     }
 
+
+    private int getGraphicBufferAt(int x, int y) {
+        return graphicBuffer[((x - 1) * DISPLAY_COL_NUM) + y];
+    }
 
     private void setGraphicBuffer(byte[] data) {
         System.arraycopy(data, 0, graphicBuffer, 0, graphicBuffer.length);

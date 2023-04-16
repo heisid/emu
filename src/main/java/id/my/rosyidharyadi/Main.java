@@ -1,14 +1,16 @@
 package id.my.rosyidharyadi;
 
+import id.my.rosyidharyadi.Model.CPU;
 import id.my.rosyidharyadi.Model.Display;
 import static id.my.rosyidharyadi.Constant.*;
 
 import javax.swing.JFrame;
+import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
 
         Display display = new Display(DISPLAY_ROW_NUM, DISPLAY_COL_NUM);
 
@@ -18,11 +20,14 @@ public class Main {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        long delay = 1L;
+        CPU cpu = new CPU();
+        cpu.loadROM("roms/IBM Logo.ch8");
+        long delay = 60L;
         while (true) {
-            TimeUnit time = TimeUnit.SECONDS;
-            byte[][] fakeData = generateRandomDisplayBuffer();
-            display.setDataArray(fakeData);
+            TimeUnit time = TimeUnit.MILLISECONDS;
+//            byte[][] fakeData = generateRandomDisplayBuffer();
+//            display.setDataArray(fakeData);
+            cpu.run();
             time.sleep(delay);
         }
     }

@@ -8,5 +8,6 @@ public class Constant {
     public static final int V_REGISTER_SIZE = 16;
     public static final int STACK_SIZE = 16;
     public static final int FONT_LENGTH = 16;
+    public static final int FONT_HEIGHT = 5;
     public static final int FONT_ADDR_START = 0x50;
 }
