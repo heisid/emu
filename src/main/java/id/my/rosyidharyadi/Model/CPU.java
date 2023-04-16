@@ -169,7 +169,17 @@ public class CPU {
         graphicBuffer[flattenedIndex] = data;
     }
 
-    public byte[] getGraphicBuffer() {
-        return graphicBuffer;
+//    public byte[] getGraphicBuffer() {
+//        return graphicBuffer;
+//    }
+
+    public byte[][] getGraphicBuffer() {
+        byte[][] temp = new byte[DISPLAY_COL_NUM][DISPLAY_ROW_NUM];
+        for (int i = 0; i < DISPLAY_ROW_NUM; i++) {
+            for (int j = 0; j < DISPLAY_COL_NUM; j++) {
+                temp[i][j] = (byte) getGraphicBufferAt(i, j);
+            }
+        }
+        return temp;
     }
 }

@@ -28,7 +28,8 @@ public class Main {
 //            byte[][] fakeData = generateRandomDisplayBuffer();
 //            display.setDataArray(fakeData);
             cpu.run();
-//            time.sleep(delay);
+            display.setDataArray(cpu.getGraphicBuffer());
+            time.sleep(delay);
         }
     }
 
