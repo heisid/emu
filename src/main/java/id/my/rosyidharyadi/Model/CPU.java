@@ -114,7 +114,7 @@ public class CPU {
 
     private void op6(short arg) {
         // Set Vx register
-        int x = arg & 0x0F00;
+        int x = (arg & 0x0F00) >> 8;
         byte val = (byte) (arg & 0x00FF);
         vRegister[x] = val;
     }
