@@ -94,6 +94,7 @@ public class CPU {
             case 0x6000 -> op6(opcodeArg);
             case 0x7000 -> op7(opcodeArg);
             case 0xA000 -> opA(opcodeArg);
+            case 0xD000 -> opD(opcodeArg);
         }
     }
 
@@ -148,8 +149,8 @@ public class CPU {
             for (int j = posY; j < Math.min(posY + 8, DISPLAY_COL_NUM); j++) {
                 int spritePixel = (spriteRow >> j) & 1; // sprite pixel di row i, bit ke-j
                 if (spritePixel == 1) {
-                    byte pixelSetValue = (byte) (getGraphicBufferAt(i, j) ^ 1);
-                    setGraphicBuffer(pixelSetValue, i, j);
+                    byte pixelSetValue = (byte) (getGraphicBufferAt(j, i) ^ 1);
+                    setGraphicBuffer(pixelSetValue, j, i);
                     vRegister[0xF] = (byte) 1;
                 }
             }
