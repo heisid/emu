@@ -158,7 +158,7 @@ public class CPU {
 
 
     private int getGraphicBufferAt(int x, int y) {
-        return graphicBuffer[((x - 1) * DISPLAY_COL_NUM) + y];
+        return graphicBuffer[(x * DISPLAY_COL_NUM) + y];
     }
 
     private void setGraphicBuffer(byte[] data) {
@@ -178,7 +178,7 @@ public class CPU {
         byte[][] temp = new byte[DISPLAY_COL_NUM][DISPLAY_ROW_NUM];
         for (int i = 0; i < DISPLAY_ROW_NUM; i++) {
             for (int j = 0; j < DISPLAY_COL_NUM; j++) {
-                temp[i][j] = (byte) getGraphicBufferAt(i, j);
+                temp[j][i] = (byte) getGraphicBufferAt(i, j);
             }
         }
         return temp;
