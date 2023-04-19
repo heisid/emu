@@ -14,13 +14,14 @@ public class Main {
 
         Display display = new Display(DISPLAY_ROW_NUM, DISPLAY_COL_NUM);
 
-        JFrame frame = new JFrame("Grid Draw");
+        JFrame frame = new JFrame("CHIP-8 EMU");
         frame.add(display);
         frame.setSize(800, 440);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         CPU cpu = new CPU();
+//        cpu.loadROM("roms/1-chip8-logo.ch8");
         cpu.loadROM("roms/IBM Logo.ch8");
         long delay = 60L;
         while (true) {

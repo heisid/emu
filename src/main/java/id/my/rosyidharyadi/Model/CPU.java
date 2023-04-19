@@ -144,9 +144,9 @@ public class CPU {
         int posX = vRegister[x] & (DISPLAY_ROW_NUM - 1); // modulo 64, initial position is wrapped
         int posY = vRegister[y] & (DISPLAY_COL_NUM - 1); // mod 32
         vRegister[0xF] = 0;
-        for (int i = posX; i < Math.min(posX + n, DISPLAY_ROW_NUM); i++) {
+        for (int i = posY; i < Math.min(posY + n, DISPLAY_ROW_NUM); i++) {
             byte spriteRow = memory[indexRegister + (i - posX)];
-            for (int j = posY; j < Math.min(posY + 8, DISPLAY_COL_NUM); j++) {
+            for (int j = posX; j < Math.min(posX + 8, DISPLAY_COL_NUM); j++) {
                 int spritePixel = (spriteRow >> j) & 1; // sprite pixel di row i, bit ke-j
                 if (spritePixel == 1) {
                     byte pixelSetValue = (byte) (getGraphicBufferAt(j, i) ^ 1);
