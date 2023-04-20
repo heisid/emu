@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import static id.my.rosyidharyadi.Model.Utility.*;
+
 public class CPU {
     private byte[] memory = new byte[MEMORY_SIZE];
     private byte[] vRegister = new byte[V_REGISTER_SIZE];
@@ -141,17 +143,23 @@ public class CPU {
         int x = (arg & 0x0F00) >> 8;
         int y = (arg & 0x00F0) >> 4;
         int n = (arg & 0x000F);
-        int posX = vRegister[x] & (DISPLAY_ROW_NUM - 1); // modulo 64, initial position is wrapped
-        int posY = vRegister[y] & (DISPLAY_COL_NUM - 1); // mod 32
+        int posX = vRegister[x] & (DISPLAY_COL_NUM - 1); // modulo 64, initial position is wrapped
+        int posY = vRegister[y] & (DISPLAY_ROW_NUM - 1); // mod 32
         vRegister[0xF] = 0;
         for (int i = posY; i < Math.min(posY + n, DISPLAY_ROW_NUM); i++) {
-            byte spriteRow = memory[indexRegister + (i - posX)];
+            byte spriteRow = memory[indexRegister + (i - posY)];
             for (int j = posX; j < Math.min(posX + 8, DISPLAY_COL_NUM); j++) {
                 int spritePixel = (spriteRow >> j) & 1; // sprite pixel di row i, bit ke-j
+                int bufferPixel = getGraphicBufferAt(i, j);
                 if (spritePixel == 1) {
-                    byte pixelSetValue = (byte) (getGraphicBufferAt(j, i) ^ 1);
-                    setGraphicBuffer(pixelSetValue, j, i);
-                    vRegister[0xF] = (byte) 1;
+//                    byte pixelSetValue = (byte) (getGraphicBufferAt(j, i) ^ 1);
+//                    setGraphicBuffer((byte)0, j, i);
+//                    vRegister[0xF] = (byte) 1;
+                    if (bufferPixel == 1) {
+                        vRegister[0xF] = (byte) 1;
+                    }
+                    byte pixelSetValue = (byte) (getGraphicBufferAt(i, j) ^ 1);
+                    setGraphicBuffer(pixelSetValue, i, j);
                 }
             }
         }
@@ -159,11 +167,7 @@ public class CPU {
 
 
     private int getGraphicBufferAt(int x, int y) {
-        return graphicBuffer[(x * DISPLAY_COL_NUM) + y];
-    }
-
-    private void setGraphicBuffer(byte[] data) {
-        System.arraycopy(data, 0, graphicBuffer, 0, graphicBuffer.length);
+        return graphicBuffer[(x * DISPLAY_ROW_NUM) + y];
     }
 
     private void setGraphicBuffer(byte data, int posX, int posY) {
@@ -176,10 +180,10 @@ public class CPU {
 //    }
 
     public byte[][] getGraphicBuffer() {
-        byte[][] temp = new byte[DISPLAY_COL_NUM][DISPLAY_ROW_NUM];
+        byte[][] temp = new byte[DISPLAY_ROW_NUM][DISPLAY_COL_NUM];
         for (int i = 0; i < DISPLAY_ROW_NUM; i++) {
             for (int j = 0; j < DISPLAY_COL_NUM; j++) {
-                temp[j][i] = (byte) getGraphicBufferAt(i, j);
+                temp[i][j] = (byte) getGraphicBufferAt(i, j);
             }
         }
         return temp;

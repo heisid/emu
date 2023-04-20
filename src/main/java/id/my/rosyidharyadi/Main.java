@@ -6,6 +6,7 @@ import static id.my.rosyidharyadi.Constant.*;
 
 import javax.swing.JFrame;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -23,10 +24,11 @@ public class Main {
         CPU cpu = new CPU();
 //        cpu.loadROM("roms/1-chip8-logo.ch8");
         cpu.loadROM("roms/IBM Logo.ch8");
-        long delay = 60L;
+        long delay = 80L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
 //            byte[][] fakeData = generateRandomDisplayBuffer();
+//            byte[][] fakeData = generatePattern();
 //            display.setDataArray(fakeData);
             cpu.run();
             display.setDataArray(cpu.getGraphicBuffer());
@@ -36,14 +38,25 @@ public class Main {
 
     private static byte[][] generateRandomDisplayBuffer()
     {
-        byte[][] res = new byte[DISPLAY_ROW_NUM][DISPLAY_COL_NUM];
+        byte[][] res = new byte[DISPLAY_COL_NUM][DISPLAY_ROW_NUM];
         Random random = new Random();
-        for (int row = 0; row < DISPLAY_COL_NUM; row++) {
-            for (int col = 0; col < DISPLAY_ROW_NUM; col++) {
-                res[row][col] = (byte) random.nextInt(2);
+        for (int i = 0; i < DISPLAY_COL_NUM; i++) {
+            for (int j = 0; j < DISPLAY_ROW_NUM; j++) {
+                res[i][j] = (byte) random.nextInt(2);
             }
         }
 
         return res;
+    }
+
+    private static byte[][] generatePattern()
+    {
+        byte[][] patternData = new byte[DISPLAY_ROW_NUM][DISPLAY_COL_NUM];
+        for (int a = 0; a < DISPLAY_ROW_NUM; a++) {
+            if (a == 2) {
+                Arrays.fill(patternData[a], (byte) 1);
+            }
+        }
+        return patternData;
     }
 }
