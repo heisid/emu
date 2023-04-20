@@ -28,7 +28,6 @@ public class CPU {
     public CPU() {
         indexRegister = 0x000;
         programCounter = MEMORY_START;
-//        stackPointer = 0x00;
         delayTimer = 0x00;
         soundTimer = 0x00;
         int[] fontInt = {

@@ -6,7 +6,6 @@ import static id.my.rosyidharyadi.Constant.*;
 
 import javax.swing.JFrame;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
