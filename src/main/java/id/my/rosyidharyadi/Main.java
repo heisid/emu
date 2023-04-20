@@ -22,8 +22,8 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         CPU cpu = new CPU();
-//        cpu.loadROM("roms/1-chip8-logo.ch8");
-        cpu.loadROM("roms/IBM Logo.ch8");
+        cpu.loadROM("roms/1-chip8-logo.ch8");
+//        cpu.loadROM("roms/IBM Logo.ch8");
         long delay = 50L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
@@ -53,8 +53,9 @@ public class Main {
     {
         byte[][] patternData = new byte[DISPLAY_ROW_NUM][DISPLAY_COL_NUM];
         for (int a = 0; a < DISPLAY_ROW_NUM; a++) {
-            if (a == 2) {
-                Arrays.fill(patternData[a], (byte) 1);
+            for (int b = 0; b < DISPLAY_COL_NUM; b++) {
+                if (a == (b-3) * (b-3))
+                    patternData[a][b] = 1;
             }
         }
         return patternData;

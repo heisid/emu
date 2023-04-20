@@ -148,8 +148,9 @@ public class CPU {
         vRegister[0xF] = 0;
         for (int i = posY; i < Math.min(posY + n, DISPLAY_ROW_NUM); i++) {
             byte spriteRow = memory[indexRegister + (i - posY)];
+//            byte spriteRow = (byte) (Integer.reverse(memory[indexRegister + (i - posY)]) >>> (Integer.SIZE - Byte.SIZE));
             for (int j = posX; j < Math.min(posX + 8, DISPLAY_COL_NUM); j++) {
-                int spritePixel = (spriteRow >> j) & 1; // sprite pixel di row i, bit ke-j
+                int spritePixel = (spriteRow >> (7 - (j - posX))) & 1; // sprite pixel di row i, bit ke-j
                 int bufferPixel = getGraphicBufferAt(i, j);
                 if (spritePixel == 1) {
 //                    byte pixelSetValue = (byte) (getGraphicBufferAt(j, i) ^ 1);
