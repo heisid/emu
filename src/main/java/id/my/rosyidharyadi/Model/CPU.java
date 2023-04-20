@@ -143,8 +143,8 @@ public class CPU {
         int x = (arg & 0x0F00) >> 8;
         int y = (arg & 0x00F0) >> 4;
         int n = (arg & 0x000F);
-        int posX = vRegister[x] & (DISPLAY_COL_NUM - 1); // modulo 64, initial position is wrapped
-        int posY = vRegister[y] & (DISPLAY_ROW_NUM - 1); // mod 32
+        int posX = vRegister[x] % 63; // modulo 64, initial position is wrapped
+        int posY = vRegister[y] % 31; // mod 32
         vRegister[0xF] = 0;
         for (int i = posY; i < Math.min(posY + n, DISPLAY_ROW_NUM); i++) {
             byte spriteRow = memory[indexRegister + (i - posY)];
@@ -158,7 +158,7 @@ public class CPU {
                     if (bufferPixel == 1) {
                         vRegister[0xF] = (byte) 1;
                     }
-                    byte pixelSetValue = (byte) (getGraphicBufferAt(i, j) ^ 1);
+                    byte pixelSetValue = (byte) (getGraphicBufferAt(i, j) ^ 0xFF);
                     setGraphicBuffer(pixelSetValue, i, j);
                 }
             }
@@ -167,11 +167,11 @@ public class CPU {
 
 
     private int getGraphicBufferAt(int x, int y) {
-        return graphicBuffer[(x * DISPLAY_ROW_NUM) + y];
+        return graphicBuffer[(y * DISPLAY_ROW_NUM) + x];
     }
 
     private void setGraphicBuffer(byte data, int posX, int posY) {
-        int flattenedIndex = (posX * DISPLAY_ROW_NUM) + posY;
+        int flattenedIndex = (posY * DISPLAY_ROW_NUM) + posX;
         graphicBuffer[flattenedIndex] = data;
     }
 

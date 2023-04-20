@@ -24,7 +24,7 @@ public class Main {
         CPU cpu = new CPU();
 //        cpu.loadROM("roms/1-chip8-logo.ch8");
         cpu.loadROM("roms/IBM Logo.ch8");
-        long delay = 80L;
+        long delay = 50L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
 //            byte[][] fakeData = generateRandomDisplayBuffer();
