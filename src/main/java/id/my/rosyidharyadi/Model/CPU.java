@@ -92,8 +92,12 @@ public class CPU {
             case 0x0000 -> op0(opcodeArg);
             case 0x1000 -> op1(opcodeArg);
             case 0x2000 -> op2(opcodeArg);
+            case 0x3000 -> op3(opcodeArg);
+            case 0x4000 -> op4(opcodeArg);
+            case 0x5000 -> op5(opcodeArg);
             case 0x6000 -> op6(opcodeArg);
             case 0x7000 -> op7(opcodeArg);
+            case 0x9000 -> op9(opcodeArg);
             case 0xA000 -> opA(opcodeArg);
             case 0xD000 -> opD(opcodeArg);
         }
@@ -134,6 +138,33 @@ public class CPU {
         programCounter = arg;
     }
 
+    private void op3(short arg) {
+        // Skip if equal
+        int x = (arg & 0xF00) >> 8;
+        int nn = arg & 0x0FF;
+        if (vRegister[x] == nn) {
+            programCounter += 2;
+        }
+    }
+
+    private void op4(short arg) {
+        // Skip if not equal
+        int x = (arg & 0xF00) >> 8;
+        int nn = arg & 0x0FF;
+        if (vRegister[x] != nn) {
+            programCounter += 2;
+        }
+    }
+
+    private void op5(short arg) {
+        // Skip if equal
+        int x = (arg & 0xF00) >> 8;
+        int y = (arg & 0x0F0) >> 4;
+        if (vRegister[x] == vRegister[y]) {
+            programCounter += 2;
+        }
+    }
+
     private void op6(short arg) {
         // Set Vx register
         int x = (arg & 0x0F00) >> 8;
@@ -149,6 +180,14 @@ public class CPU {
         vRegister[x] += nn;
     }
 
+    private void op9(short arg) {
+        // Skip if not equal
+        int x = (arg & 0xF00) >> 8;
+        int y = (arg & 0x0F0) >> 4;
+        if (vRegister[x] != vRegister[y]) {
+            programCounter += 2;
+        }
+    }
 
     private void opA(short arg) {
         // Set index register
