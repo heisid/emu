@@ -17,7 +17,7 @@ public class CPU {
     private short programCounter;
 
     private short[] stack = new short[STACK_SIZE];
-    private byte stackPointer;
+//    private byte stackPointer;
 
     private byte delayTimer;
     private byte soundTimer;
@@ -29,7 +29,7 @@ public class CPU {
     public CPU() {
         indexRegister = 0x000;
         programCounter = MEMORY_START;
-        stackPointer = 0x00;
+//        stackPointer = 0x00;
         delayTimer = 0x00;
         soundTimer = 0x00;
         int[] fontInt = {
@@ -93,11 +93,28 @@ public class CPU {
         switch (opcodeClass) {
             case 0x0000 -> op0(opcodeArg);
             case 0x1000 -> op1(opcodeArg);
+            case 0x2000 -> op2(opcodeArg);
             case 0x6000 -> op6(opcodeArg);
             case 0x7000 -> op7(opcodeArg);
             case 0xA000 -> opA(opcodeArg);
             case 0xD000 -> opD(opcodeArg);
         }
+    }
+
+    private void stackPush(short val) {
+        for (int i = stack.length - 2; i > 0; i--) {
+            stack[i + 1] = stack[i];
+        }
+        stack[0] = val;
+    }
+
+    private short stackPop() {
+        short poppedVal = stack[0];
+        for (int i = 1; i < stack.length; i++) {
+            stack[i - 1] = stack[i];
+        }
+        stack[stack.length - 1] = 0;
+        return poppedVal;
     }
 
     private void op0(short arg) {
@@ -106,12 +123,19 @@ public class CPU {
             Arrays.fill(graphicBuffer, 0, graphicBuffer.length, (byte) 0);
         } else if (arg == (short)0x0EE) {
             // Return from subroutine
-            --stackPointer;
-            programCounter = stack[stackPointer];
+//            --stackPointer;
+//            programCounter = stack[stackPointer];
+            programCounter = stackPop();
         }
     }
 
     private void op1(short arg) {
+        programCounter = arg;
+    }
+
+    private void op2(short arg) {
+        // Routine call
+        stackPush(programCounter);
         programCounter = arg;
     }
 
