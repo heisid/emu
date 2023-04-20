@@ -17,7 +17,6 @@ public class CPU {
     private short programCounter;
 
     private short[] stack = new short[STACK_SIZE];
-//    private byte stackPointer;
 
     private byte delayTimer;
     private byte soundTimer;
@@ -122,9 +121,6 @@ public class CPU {
             // Clear screen
             Arrays.fill(graphicBuffer, 0, graphicBuffer.length, (byte) 0);
         } else if (arg == (short)0x0EE) {
-            // Return from subroutine
-//            --stackPointer;
-//            programCounter = stack[stackPointer];
             programCounter = stackPop();
         }
     }
@@ -167,19 +163,15 @@ public class CPU {
         int x = (arg & 0x0F00) >> 8;
         int y = (arg & 0x00F0) >> 4;
         int n = (arg & 0x000F);
-        int posX = vRegister[x] % 63; // modulo 64, initial position is wrapped
-        int posY = vRegister[y] % 31; // mod 32
+        int posX = vRegister[x] % 63;
+        int posY = vRegister[y] % 31;
         vRegister[0xF] = 0;
         for (int i = posY; i < Math.min(posY + n, DISPLAY_ROW_NUM); i++) {
             byte spriteRow = memory[indexRegister + (i - posY)];
-//            byte spriteRow = (byte) (Integer.reverse(memory[indexRegister + (i - posY)]) >>> (Integer.SIZE - Byte.SIZE));
             for (int j = posX; j < Math.min(posX + 8, DISPLAY_COL_NUM); j++) {
                 int spritePixel = (spriteRow >> (7 - (j - posX))) & 1; // sprite pixel di row i, bit ke-j
                 int bufferPixel = getGraphicBufferAt(i, j);
                 if (spritePixel == 1) {
-//                    byte pixelSetValue = (byte) (getGraphicBufferAt(j, i) ^ 1);
-//                    setGraphicBuffer((byte)0, j, i);
-//                    vRegister[0xF] = (byte) 1;
                     if (bufferPixel == 1) {
                         vRegister[0xF] = (byte) 1;
                     }
@@ -200,9 +192,6 @@ public class CPU {
         graphicBuffer[flattenedIndex] = data;
     }
 
-//    public byte[] getGraphicBuffer() {
-//        return graphicBuffer;
-//    }
 
     public byte[][] getGraphicBuffer() {
         byte[][] temp = new byte[DISPLAY_ROW_NUM][DISPLAY_COL_NUM];
