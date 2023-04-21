@@ -189,28 +189,20 @@ public class CPU {
         int intVx = byte2Ui(vRegister[x]);
         int intVy = byte2Ui(vRegister[y]);
         switch (subtype) {
-            case 0x0:
-                vRegister[x] = vRegister[y];
-                break;
-            case 0x1:
-                vRegister[x] |= vRegister[y];
-                break;
-            case 0x2:
-                vRegister[x] &= vRegister[y];
-                break;
-            case 0x3:
-                vRegister[x] ^= vRegister[y];
-                break;
-            case 0x4:
+            case 0x0 -> vRegister[x] = vRegister[y];
+            case 0x1 -> vRegister[x] |= vRegister[y];
+            case 0x2 -> vRegister[x] &= vRegister[y];
+            case 0x3 -> vRegister[x] ^= vRegister[y];
+            case 0x4 -> {
                 int resAdd = intVx + intVy;
-                vRegister[0xF] = resAdd > 255 ? (byte)1 : (byte)0;
+                vRegister[0xF] = resAdd > 255 ? (byte) 1 : (byte) 0;
                 vRegister[x] = byteFromUi(resAdd);
-                break;
-            case 0x5:
-                vRegister[0xF] = intVx > intVy ? (byte)1 : (byte)0;
+            }
+            case 0x5 -> {
+                vRegister[0xF] = intVx > intVy ? (byte) 1 : (byte) 0;
                 vRegister[x] = byteFromUi(intVx - intVy);
-                break;
-            case 0x6:
+            }
+            case 0x6 -> {
                 // Note: Setting Vx to Vy was done in original COSMAC VIP
                 // But in modern machines (starting in 1990s) this isn't
                 // the case anymore.
@@ -218,20 +210,20 @@ public class CPU {
 //                vRegister[x] = vRegister[y];
                 // wait, this getBit below is silly,
                 // but for the sake of consistency with case 0xE i'll keep it
-                vRegister[0xF] = (byte)getBit(vRegister[x], 0);
-                vRegister[x] = (byte)(vRegister[x] >> 1);
-                break;
-            case 0x7:
-                vRegister[0xF] = intVy > intVx ? (byte)1 : (byte)0;
+                vRegister[0xF] = (byte) getBit(vRegister[x], 0);
+                vRegister[x] = (byte) (vRegister[x] >> 1);
+            }
+            case 0x7 -> {
+                vRegister[0xF] = intVy > intVx ? (byte) 1 : (byte) 0;
                 vRegister[x] = byteFromUi(intVy - intVx);
-                break;
-            case 0xE:
+            }
+            case 0xE -> {
                 // Note: same as case 0x6
-                vRegister[0xF] = (byte)getBit(vRegister[x], 7);
-                vRegister[x] = (byte)(vRegister[x] << 1);
-                break;
-            default:
-                break;
+                vRegister[0xF] = (byte) getBit(vRegister[x], 7);
+                vRegister[x] = (byte) (vRegister[x] << 1);
+            }
+            default -> {
+            }
         }
     }
 
