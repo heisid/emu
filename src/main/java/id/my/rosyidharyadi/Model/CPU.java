@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static id.my.rosyidharyadi.Model.Utility.*;
 
@@ -100,6 +101,8 @@ public class CPU {
             case 0x8000 -> op8(opcodeArg);
             case 0x9000 -> op9(opcodeArg);
             case 0xA000 -> opA(opcodeArg);
+            case 0xB000 -> opB(opcodeArg);
+            case 0xC000 -> opC(opcodeArg);
             case 0xD000 -> opD(opcodeArg);
         }
     }
@@ -238,7 +241,21 @@ public class CPU {
 
     private void opA(short arg) {
         // Set index register
-        indexRegister = (short) (arg & 0x0FFF);
+        indexRegister = arg;
+    }
+
+    private void opB(short arg) {
+        // Another ambigous instruction
+        // Below is COSMAC VIP compatible. Todo: configurable
+        programCounter = (short)(vRegister[0x0] + arg);
+    }
+
+    private void opC(short arg) {
+        // Random
+        int x = (arg & 0xF00) >> 8;
+        int nn = arg & 0x0FF;
+        int randNum = ThreadLocalRandom.current().nextInt(0, nn + 1);
+        vRegister[x] = (byte) (randNum & nn);
     }
 
 
