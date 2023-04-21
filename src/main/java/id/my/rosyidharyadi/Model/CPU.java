@@ -78,6 +78,12 @@ public class CPU {
     }
 
 
+    public boolean isKeyPressed() {
+        // todo
+        return false;
+    }
+
+
     private short fetch() {
         // Get opcode (2 bytes) from memory
         byte hi = memory[programCounter];
@@ -179,7 +185,7 @@ public class CPU {
 
     private void op7(short arg) {
         // Add n to register Vx
-        int x = arg & 0x0F00;
+        int x = (arg & 0x0F00) >> 8;
         byte nn = (byte) (arg & 0x00FF);
         vRegister[x] += nn;
     }
@@ -265,8 +271,8 @@ public class CPU {
         int x = (arg & 0x0F00) >> 8;
         int y = (arg & 0x00F0) >> 4;
         int n = (arg & 0x000F);
-        int posX = vRegister[x] % 63;
-        int posY = vRegister[y] % 31;
+        int posX = byte2Ui(vRegister[x]) % 63;
+        int posY = byte2Ui(vRegister[y]) % 31;
         vRegister[0xF] = 0;
         for (int i = posY; i < Math.min(posY + n, DISPLAY_ROW_NUM); i++) {
             byte spriteRow = memory[indexRegister + (i - posY)];
