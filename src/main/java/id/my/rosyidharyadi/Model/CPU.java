@@ -97,6 +97,7 @@ public class CPU {
             case 0x5000 -> op5(opcodeArg);
             case 0x6000 -> op6(opcodeArg);
             case 0x7000 -> op7(opcodeArg);
+            case 0x8000 -> op8(opcodeArg);
             case 0x9000 -> op9(opcodeArg);
             case 0xA000 -> opA(opcodeArg);
             case 0xD000 -> opD(opcodeArg);
@@ -178,6 +179,60 @@ public class CPU {
         int x = arg & 0x0F00;
         byte nn = (byte) (arg & 0x00FF);
         vRegister[x] += nn;
+    }
+
+    private void op8(short arg) {
+        // Binary and arithmetic operations
+        int subtype = arg & 0x00F;
+        int x = (arg & 0xF00) >> 8;
+        int y = (arg & 0x0F0) >> 4;
+        int intVx = byte2Ui(vRegister[x]);
+        int intVy = byte2Ui(vRegister[y]);
+        switch (subtype) {
+            case 0x0:
+                vRegister[x] = vRegister[y];
+                break;
+            case 0x1:
+                vRegister[x] |= vRegister[y];
+                break;
+            case 0x2:
+                vRegister[x] &= vRegister[y];
+                break;
+            case 0x3:
+                vRegister[x] ^= vRegister[y];
+                break;
+            case 0x4:
+                int resAdd = intVx + intVy;
+                vRegister[0xF] = resAdd > 255 ? (byte)1 : (byte)0;
+                vRegister[x] = byteFromUi(resAdd);
+                break;
+            case 0x5:
+                vRegister[0xF] = intVx > intVy ? (byte)1 : (byte)0;
+                vRegister[x] = byteFromUi(intVx - intVy);
+                break;
+            case 0x6:
+                // Note: Setting Vx to Vy was done in original COSMAC VIP
+                // But in modern machines (starting in 1990s) this isn't
+                // the case anymore.
+                // todo: make it configurable to be compatible with the old one
+//                vRegister[x] = vRegister[y];
+                // wait, this getBit below is silly,
+                // but for the sake of consistency with case 0xE i'll keep it
+                vRegister[0xF] = (byte)getBit(vRegister[x], 0);
+                vRegister[x] = (byte)(vRegister[x] >> 1);
+                break;
+            case 0x7:
+                vRegister[0xF] = intVy > intVx ? (byte)1 : (byte)0;
+                vRegister[x] = byteFromUi(intVy - intVx);
+                break;
+            case 0xE:
+                // Note: same as case 0x6
+                vRegister[0xF] = (byte)getBit(vRegister[x], 7);
+                vRegister[x] = (byte)(vRegister[x] << 1);
+                break;
+            default:
+                break;
+        }
     }
 
     private void op9(short arg) {

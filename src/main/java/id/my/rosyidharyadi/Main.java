@@ -21,8 +21,8 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         CPU cpu = new CPU();
-        cpu.loadROM("roms/1-chip8-logo.ch8"); // todo: dynamic
-//        cpu.loadROM("roms/IBM Logo.ch8");
+//        cpu.loadROM("roms/1-chip8-logo.ch8"); // todo: dynamic
+        cpu.loadROM("roms/IBM Logo.ch8");
         long delay = 50L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
