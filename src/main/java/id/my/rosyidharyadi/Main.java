@@ -6,7 +6,7 @@ import id.my.rosyidharyadi.Model.Keyboard;
 
 import static id.my.rosyidharyadi.Constant.*;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +15,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
 
         Display display = new Display(DISPLAY_ROW_NUM, DISPLAY_COL_NUM);
+        JPanel debugInfoPanel = new JPanel();
 
         JFrame frame = new JFrame("CHIP-8 EMU");
         frame.add(display);
@@ -28,7 +29,8 @@ public class Main {
         CPU cpu = new CPU(keyboard);
 //        cpu.loadROM("roms/1-chip8-logo.ch8"); // todo: dynamic
 //        cpu.loadROM("roms/IBM Logo.ch8");
-        cpu.loadROM("roms/UFO");
+        cpu.loadROM("roms/3-corax+.ch8");
+//        cpu.loadROM("roms/4-flags.ch8");
         long delay = 50L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
@@ -37,7 +39,7 @@ public class Main {
 //            display.setDataArray(fakeData);
             cpu.run();
             display.setDataArray(cpu.getGraphicBuffer());
-//            time.sleep(delay);
+            time.sleep(delay);
         }
     }
 

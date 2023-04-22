@@ -7,9 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static id.my.rosyidharyadi.Model.Utility.*;
+import static java.util.Map.entry;
 
 public class CPU {
     private byte[] memory = new byte[MEMORY_SIZE];
@@ -62,7 +65,6 @@ public class CPU {
 
 
     public void run() {
-        // One step run (what's the proper term for this?)
         short opcode = fetch();
         decodeExecute(opcode);
         timerUpdate();
@@ -168,7 +170,7 @@ public class CPU {
     private void op3(short arg) {
         // Skip if equal
         int x = (arg & 0xF00) >> 8;
-        int nn = arg & 0x0FF;
+        byte nn = byteFromUi(arg & 0x0FF);
         if (vRegister[x] == nn) {
             programCounter += 2;
         }
@@ -177,7 +179,7 @@ public class CPU {
     private void op4(short arg) {
         // Skip if not equal
         int x = (arg & 0xF00) >> 8;
-        int nn = arg & 0x0FF;
+        byte nn = byteFromUi(arg & 0x0FF);
         if (vRegister[x] != nn) {
             programCounter += 2;
         }
@@ -226,7 +228,7 @@ public class CPU {
             }
             case 0x5 -> {
                 vRegister[0xF] = intVx > intVy ? (byte) 1 : (byte) 0;
-                vRegister[x] = byteFromUi(intVx - intVy);
+                vRegister[x] = (byte)(intVx - intVy);
             }
             case 0x6 -> {
                 // Note: Setting Vx to Vy was done in original COSMAC VIP
@@ -413,5 +415,23 @@ public class CPU {
             }
         }
         return temp;
+    }
+
+    // Buat debugging aja
+    public HashMap<String, String> getState() {
+        HashMap<String, String> debugInfo =  new HashMap<>(
+                    Map.ofEntries(
+                            entry("PC", showHex(programCounter)),
+                            entry("I", showHex(indexRegister)),
+                            entry("DT", showHex(delayTimer)),
+                            entry("ST", showHex(soundTimer)),
+                            entry("Stack", Arrays.toString(stack))
+                    )
+        );
+        for (int i = 0; i < vRegister.length; i++) {
+            debugInfo.put("v" + showHex(i), showHex(vRegister[i]));
+        }
+
+        return debugInfo;
     }
 }
