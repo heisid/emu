@@ -376,11 +376,11 @@ public class CPU {
             // BCD Conversion
             case 0x33 -> {
                 int val = byte2Ui(vRegister[x]);
-                int idx = 0;
+                int idx = 2;
                 while (val > 0) {
                     memory[indexRegister + idx] = byteFromUi(val % 10);
                     val = val / 10;
-                    idx++;
+                    idx--;
                 }
             }
 
