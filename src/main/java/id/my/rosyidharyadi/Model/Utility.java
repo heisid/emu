@@ -21,6 +21,14 @@ public class Utility {
         return (byte) (val & 0xFF);
     }
 
+    public static int short2Ui(short val) {
+        return val & 0xFF;
+    }
+
+    public static short shortFromUi(int val) {
+        return (short) (val & 0xFFF);
+    }
+
     public static int getBit(byte val, int pos) {
         return val & (0x01 << pos);
     }

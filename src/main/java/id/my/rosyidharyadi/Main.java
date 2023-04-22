@@ -2,6 +2,8 @@ package id.my.rosyidharyadi;
 
 import id.my.rosyidharyadi.Model.CPU;
 import id.my.rosyidharyadi.Model.Display;
+import id.my.rosyidharyadi.Model.Keyboard;
+
 import static id.my.rosyidharyadi.Constant.*;
 
 import javax.swing.JFrame;
@@ -20,9 +22,13 @@ public class Main {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        CPU cpu = new CPU();
-        cpu.loadROM("roms/MAZE"); // todo: dynamic
+        Keyboard keyboard = new Keyboard();
+        frame.addKeyListener(keyboard);
+
+        CPU cpu = new CPU(keyboard);
+//        cpu.loadROM("roms/1-chip8-logo.ch8"); // todo: dynamic
 //        cpu.loadROM("roms/IBM Logo.ch8");
+        cpu.loadROM("roms/UFO");
         long delay = 50L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
@@ -31,7 +37,7 @@ public class Main {
 //            display.setDataArray(fakeData);
             cpu.run();
             display.setDataArray(cpu.getGraphicBuffer());
-            time.sleep(delay);
+//            time.sleep(delay);
         }
     }
 

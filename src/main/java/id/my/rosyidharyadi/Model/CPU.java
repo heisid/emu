@@ -21,12 +21,15 @@ public class CPU {
 
     private byte delayTimer;
     private byte soundTimer;
+    private long timerLastTime;
     private byte[] font = new byte[FONT_LENGTH * FONT_HEIGHT];
 
     private byte[] graphicBuffer = new byte[DISPLAY_ROW_NUM * DISPLAY_COL_NUM];
 
+    private final Keyboard keyboard;
 
-    public CPU() {
+
+    public CPU(Keyboard keyboard) {
         indexRegister = 0x000;
         programCounter = MEMORY_START;
         delayTimer = 0x00;
@@ -53,6 +56,8 @@ public class CPU {
             font[i] = (byte) fontInt[i];
         }
         loadFont();
+        this.keyboard = keyboard;
+        timerLastTime = System.nanoTime();
     }
 
 
@@ -60,6 +65,22 @@ public class CPU {
         // One step run (what's the proper term for this?)
         short opcode = fetch();
         decodeExecute(opcode);
+        timerUpdate();
+    }
+
+
+    private void timerUpdate() {
+        long now = System.nanoTime();
+        long timeDelta = now - timerLastTime; // 1/60 second
+        timerLastTime = now;
+        if (timeDelta > 16670000) {
+            if (soundTimer > 0) {
+                soundTimer--;
+            }
+            if (delayTimer > 0) {
+                delayTimer--;
+            }
+        }
     }
 
 
@@ -75,12 +96,6 @@ public class CPU {
         for (short i = FONT_ADDR_START; i < (FONT_ADDR_START + FONT_LENGTH); i++) {
             memory[i] = font[i - FONT_ADDR_START];
         }
-    }
-
-
-    public boolean isKeyPressed() {
-        // todo
-        return false;
     }
 
 
@@ -110,6 +125,8 @@ public class CPU {
             case 0xB000 -> opB(opcodeArg);
             case 0xC000 -> opC(opcodeArg);
             case 0xD000 -> opD(opcodeArg);
+            case 0xE000 -> opE(opcodeArg);
+            case 0xF000 -> opF(opcodeArg);
         }
     }
 
@@ -286,6 +303,93 @@ public class CPU {
                     byte pixelSetValue = (byte) (getGraphicBufferAt(i, j) ^ 0xFF);
                     setGraphicBuffer(pixelSetValue, i, j);
                 }
+            }
+        }
+    }
+
+
+    private void opE(short arg) {
+        int subtype = arg & 0x0FF;
+        int x = (arg & 0xF00) >> 8;
+        int keyBeingPressed = keyboard.getKeyBeingPressed();
+        int vX = vRegister[x];
+
+        switch (subtype) {
+            case 0x9E -> {
+                if (vX == keyBeingPressed) {
+                    programCounter += 2;
+                }
+            }
+            case 0x1A -> {
+                if (vX != keyBeingPressed) {
+                    programCounter += 2;
+                }
+            }
+        }
+    }
+
+
+    private void opF(short arg) {
+        int subtype = arg & 0x0FF;
+        int x = (arg & 0xF00) >> 8;
+
+        switch (subtype) {
+            // Timer related opcodes
+            case 0x07 -> {
+                vRegister[x] = delayTimer;
+            }
+            case 0x15 -> {
+                delayTimer = vRegister[x];
+            }
+            case 0x18 -> {
+                soundTimer = vRegister[x];
+            }
+
+            // Index addition
+            case 0x1E -> {
+                int resAdd = byte2Ui(vRegister[x]) + short2Ui(indexRegister);
+                if (resAdd > 0xFFF) { // Amiga behavior of "overflow"
+                    vRegister[0xF] = 1;
+                }
+                indexRegister = shortFromUi(resAdd);
+            }
+
+            // Get key (blocking behaviour)
+            case 0x0A -> {
+                // Halt execution until a key pressed
+                int currentKey = keyboard.getKeyBeingPressed();
+                if (currentKey == -1) {
+                    programCounter -= 2;
+                } else {
+                    vRegister[x] = byteFromUi(currentKey);
+                }
+            }
+
+            // Get Font
+            case 0x29 -> {
+                int fontIdx = vRegister[x] & 0x0F; // get last nibble
+                indexRegister = shortFromUi(FONT_ADDR_START + (fontIdx * FONT_HEIGHT));
+            }
+
+            // BCD Conversion
+            case 0x33 -> {
+                int val = byte2Ui(vRegister[x]);
+                int idx = 0;
+                while (val > 0) {
+                    memory[indexRegister + idx] = byteFromUi(val % 10);
+                    val = val / 10;
+                    idx++;
+                }
+            }
+
+            // Memory Store
+            case 0x55 -> {
+                System.arraycopy(vRegister, 0, memory, short2Ui(indexRegister), x + 1);
+            }
+
+            // Memory Load
+            case 0x65 -> {
+                System.arraycopy(memory, short2Ui(indexRegister), vRegister, 0, x + 1);
             }
         }
     }

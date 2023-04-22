@@ -1,14 +1,16 @@
 package id.my.rosyidharyadi.Model;
 
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
 
-public class Keyboard extends KeyAdapter {
-    private final HashMap<Integer, Integer> map = new HashMap<>(
+public class Keyboard implements KeyListener {
+    // this is so wacky
+    private int keyBeingPressed = -1; // -1: no relevant key is pressed
+    private final HashMap<Integer, Integer> keyboardMap = new HashMap<>(
             Map.ofEntries(
                     entry(KeyEvent.VK_1, 0x1),
                     entry(KeyEvent.VK_2, 0x2),
@@ -29,5 +31,25 @@ public class Keyboard extends KeyAdapter {
             )
     );
 
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+        // nothin'
+    }
 
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        int keyCode = keyEvent.getKeyCode();
+        if (keyboardMap.containsKey(keyCode)) {
+            keyBeingPressed = keyboardMap.get(keyCode);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+        keyBeingPressed = -1;
+    }
+
+    public Integer getKeyBeingPressed() {
+        return keyBeingPressed;
+    }
 }
