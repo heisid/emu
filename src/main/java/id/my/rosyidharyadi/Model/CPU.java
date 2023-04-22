@@ -386,12 +386,12 @@ public class CPU {
 
             // Memory Store
             case 0x55 -> {
-                System.arraycopy(vRegister, 0, memory, short2Ui(indexRegister), x + 1);
+                System.arraycopy(vRegister, 0, memory, indexRegister, x + 1);
             }
 
             // Memory Load
             case 0x65 -> {
-                System.arraycopy(memory, short2Ui(indexRegister), vRegister, 0, x + 1);
+                System.arraycopy(memory, indexRegister, vRegister, 0, x + 1);
             }
         }
     }
