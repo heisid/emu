@@ -22,11 +22,11 @@ public class Utility {
     }
 
     public static int short2Ui(short val) {
-        return val & 0xFF;
+        return val & 0xFFFF;
     }
 
     public static short shortFromUi(int val) {
-        return (short) (val & 0xFFF);
+        return (short) (val & 0xFFFF);
     }
 
     public static int getBit(byte val, int pos) {

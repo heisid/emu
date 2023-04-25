@@ -29,9 +29,10 @@ public class Main {
         CPU cpu = new CPU(keyboard);
 //        cpu.loadROM("roms/1-chip8-logo.ch8"); // todo: dynamic
 //        cpu.loadROM("roms/IBM Logo.ch8");
-        cpu.loadROM("roms/3-corax+.ch8");
+//        cpu.loadROM("roms/3-corax+.ch8");
 //        cpu.loadROM("roms/4-flags.ch8");
-        long delay = 50L;
+        cpu.loadROM("roms/BRIX");
+        long delay = 10L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
 //            byte[][] fakeData = generateRandomDisplayBuffer();
