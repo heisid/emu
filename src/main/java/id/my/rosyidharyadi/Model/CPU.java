@@ -239,7 +239,7 @@ public class CPU {
                 // wait, this getBit below is silly,
                 // but for the sake of consistency with case 0xE i'll keep it
                 vRegister[0xF] = (byte) getBit(vRegister[x], 0);
-                vRegister[x] = (byte) (vRegister[x] >> 1);
+                vRegister[x] = (byte) ((vRegister[x] & 0xFF) >> 1);
             }
             case 0x7 -> {
                 vRegister[0xF] = intVy > intVx ? (byte) 1 : (byte) 0;
