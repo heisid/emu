@@ -134,7 +134,7 @@ public class CPU {
 
     private void stackPush(short val) {
         for (int i = stack.length - 2; i > 0; i--) {
-            stack[i + 1] = stack[i];
+            stack[i] = stack[i - 1];
         }
         stack[0] = val;
     }
