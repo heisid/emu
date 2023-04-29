@@ -23,6 +23,9 @@ public class Main {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        frame.setFocusable(true);
+        frame.requestFocus();
+
         Keyboard keyboard = new Keyboard();
         frame.addKeyListener(keyboard);
 
@@ -30,8 +33,11 @@ public class Main {
 //        cpu.loadROM("roms/1-chip8-logo.ch8"); // todo: dynamic
 //        cpu.loadROM("roms/IBM Logo.ch8");
 //        cpu.loadROM("roms/1-chip8-logo.ch8");
-        cpu.loadROM("roms/4-flags.ch8");
+//        cpu.loadROM("roms/4-flags.ch8");
+//        cpu.loadROM("roms/6-keypad.ch8");
 //        cpu.loadROM("roms/delay_timer_test.ch8");
+//        cpu.loadROM("roms/UFO");
+        cpu.loadROM("roms/Keypad Test [Hap, 2006].ch8");
         long delay = 10L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
@@ -40,7 +46,7 @@ public class Main {
 //            display.setDataArray(fakeData);
             cpu.run();
             display.setDataArray(cpu.getGraphicBuffer());
-            time.sleep(delay);
+//            time.sleep(delay);
         }
     }
 
