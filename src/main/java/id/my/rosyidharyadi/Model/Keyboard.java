@@ -41,13 +41,11 @@ public class Keyboard implements KeyListener {
         int keyCode = keyEvent.getKeyCode();
         if (keyboardMap.containsKey(keyCode)) {
             keyBeingPressed = keyboardMap.get(keyCode);
-//            System.out.println("Key pressed: " + keyBeingPressed);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-//        System.out.println("Key released ");
         keyBeingPressed = -1;
     }
 

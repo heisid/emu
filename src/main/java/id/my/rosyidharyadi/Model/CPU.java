@@ -22,7 +22,6 @@ public class CPU {
 
     private byte delayTimer;
     private byte soundTimer;
-//    private long timerLastTime;
     private byte[] font = new byte[FONT_LENGTH * FONT_HEIGHT];
 
     private byte[] graphicBuffer = new byte[DISPLAY_ROW_NUM * DISPLAY_COL_NUM];
@@ -58,7 +57,6 @@ public class CPU {
         }
         loadFont();
         this.keyboard = keyboard;
-//        timerLastTime = System.nanoTime();
         TimerTask task = new TimerTask() {
             public void run() {
                 if (soundTimer > 0) {
@@ -81,22 +79,6 @@ public class CPU {
         decodeExecute(opcode);
 //        timerUpdate();
     }
-
-
-//    private void timerUpdate() {
-//        long now = System.nanoTime();
-//        double ns = 1000000000;
-//        double timeDelta = (now - timerLastTime) / ns; // 1/60 second
-//        timerLastTime = now;
-//        if (timeDelta >= (double) 1 /60) {
-//            if (soundTimer > 0) {
-//                soundTimer = (byte) (byte2Ui(soundTimer) - 1);
-//            }
-//            if (delayTimer > 0) {
-//                delayTimer = (byte) (byte2Ui(delayTimer) - 1);
-//            }
-//        }
-//    }
 
 
     public void loadROM(String romFileName) throws IOException {
