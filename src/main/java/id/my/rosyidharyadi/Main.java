@@ -35,9 +35,9 @@ public class Main {
 //        cpu.loadROM("roms/4-flags.ch8");
 //        cpu.loadROM("roms/6-keypad.ch8");
 //        cpu.loadROM("roms/delay_timer_test.ch8");
-        cpu.loadROM("roms/UFO");
-//        cpu.loadROM("roms/Keypad Test [Hap, 2006].ch8");
-        long delay = 10L;
+//        cpu.loadROM("roms/Life [GV Samways, 1980].ch8");
+        cpu.loadROM("roms/Keypad Test [Hap, 2006].ch8");
+        long delay = 1000L / 500L;
         while (true) {
             TimeUnit time = TimeUnit.MILLISECONDS;
             cpu.run();
