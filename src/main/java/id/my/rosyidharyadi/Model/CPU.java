@@ -223,12 +223,12 @@ public class CPU {
             case 0x3 -> vRegister[x] ^= vRegister[y];
             case 0x4 -> {
                 int resAdd = intVx + intVy;
-                vRegister[0xF] = resAdd > 255 ? (byte) 1 : (byte) 0;
                 vRegister[x] = byteFromUi(resAdd);
+                vRegister[0xF] = resAdd > 255 ? (byte) 1 : (byte) 0;
             }
             case 0x5 -> {
-                vRegister[0xF] = intVx > intVy ? (byte) 1 : (byte) 0;
                 vRegister[x] = (byte)(intVx - intVy);
+                vRegister[0xF] = intVx > intVy ? (byte) 1 : (byte) 0;
             }
             case 0x6 -> {
                 // Note: Setting Vx to Vy was done in original COSMAC VIP
@@ -238,12 +238,12 @@ public class CPU {
 //                vRegister[x] = vRegister[y];
                 // wait, this getBit below is silly,
                 // but for the sake of consistency with case 0xE i'll keep it
-                vRegister[0xF] = (byte) getBit(vRegister[x], 0);
                 vRegister[x] = (byte) ((vRegister[x] & 0xFF) >> 1);
+                vRegister[0xF] = (byte) getBit(vRegister[x], 0);
             }
             case 0x7 -> {
-                vRegister[0xF] = intVy > intVx ? (byte) 1 : (byte) 0;
                 vRegister[x] = byteFromUi(intVy - intVx);
+                vRegister[0xF] = intVy > intVx ? (byte) 1 : (byte) 0;
             }
             case 0xE -> {
                 // Note: same as case 0x6
