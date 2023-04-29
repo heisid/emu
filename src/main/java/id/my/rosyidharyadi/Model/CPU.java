@@ -238,8 +238,9 @@ public class CPU {
 //                vRegister[x] = vRegister[y];
                 // wait, this getBit below is silly,
                 // but for the sake of consistency with case 0xE i'll keep it
+                byte tempVx = vRegister[x];
                 vRegister[x] = (byte) ((vRegister[x] & 0xFF) >> 1);
-                vRegister[0xF] = (byte) getBit(vRegister[x], 0);
+                vRegister[0xF] = (byte) getBit(tempVx, 0);
             }
             case 0x7 -> {
                 vRegister[x] = byteFromUi(intVy - intVx);
