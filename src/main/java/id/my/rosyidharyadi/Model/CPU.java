@@ -248,8 +248,9 @@ public class CPU {
             }
             case 0xE -> {
                 // Note: same as case 0x6
-                vRegister[0xF] = (byte) getBit(vRegister[x], 7);
-                vRegister[x] = (byte) (vRegister[x] << 1);
+                byte tempVx = vRegister[x];
+                vRegister[x] = (byte) ((vRegister[x] & 0xFF) << 1);
+                vRegister[0xF] = (byte) getBit(tempVx, 7);
             }
             default -> {
             }

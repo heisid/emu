@@ -30,6 +30,6 @@ public class Utility {
     }
 
     public static int getBit(byte val, int pos) {
-        return val & (0x01 << pos);
+        return (val & (0x01 << pos)) >> pos;
     }
 }
