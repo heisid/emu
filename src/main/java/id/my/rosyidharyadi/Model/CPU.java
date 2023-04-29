@@ -95,7 +95,7 @@ public class CPU {
     }
 
     private void loadFont() {
-        for (short i = FONT_ADDR_START; i < (FONT_ADDR_START + FONT_LENGTH); i++) {
+        for (short i = FONT_ADDR_START; i < (FONT_ADDR_START + (FONT_LENGTH * FONT_HEIGHT)); i++) {
             memory[i] = font[i - FONT_ADDR_START];
         }
     }
@@ -325,7 +325,7 @@ public class CPU {
                 }
             }
             case 0x1A -> {
-                if (vX != keyBeingPressed) {
+                if (vX != keyBeingPressed && vX != -1) {
                     programCounter += 2;
                 }
             }
