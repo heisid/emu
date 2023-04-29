@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static id.my.rosyidharyadi.Model.Utility.*;
@@ -24,7 +22,7 @@ public class CPU {
 
     private byte delayTimer;
     private byte soundTimer;
-    private long timerLastTime;
+//    private long timerLastTime;
     private byte[] font = new byte[FONT_LENGTH * FONT_HEIGHT];
 
     private byte[] graphicBuffer = new byte[DISPLAY_ROW_NUM * DISPLAY_COL_NUM];
@@ -60,30 +58,45 @@ public class CPU {
         }
         loadFont();
         this.keyboard = keyboard;
-        timerLastTime = System.nanoTime();
+//        timerLastTime = System.nanoTime();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                if (soundTimer > 0) {
+                    soundTimer = (byte) (byte2Ui(soundTimer) - 1);
+                }
+                if (delayTimer > 0) {
+                    delayTimer = (byte) (byte2Ui(delayTimer) - 1);
+                }
+            }
+        };
+        Timer timer = new Timer("Timer");
+
+        long interval = 1000L / 60;
+        timer.scheduleAtFixedRate(task, 0, interval);
     }
 
 
     public void run() {
         short opcode = fetch();
         decodeExecute(opcode);
-        timerUpdate();
+//        timerUpdate();
     }
 
 
-    private void timerUpdate() {
-        long now = System.nanoTime();
-        long timeDelta = now - timerLastTime; // 1/60 second
-        timerLastTime = now;
-        if (timeDelta > 16670000) {
-            if (soundTimer > 0) {
-                soundTimer--;
-            }
-            if (delayTimer > 0) {
-                delayTimer--;
-            }
-        }
-    }
+//    private void timerUpdate() {
+//        long now = System.nanoTime();
+//        double ns = 1000000000;
+//        double timeDelta = (now - timerLastTime) / ns; // 1/60 second
+//        timerLastTime = now;
+//        if (timeDelta >= (double) 1 /60) {
+//            if (soundTimer > 0) {
+//                soundTimer = (byte) (byte2Ui(soundTimer) - 1);
+//            }
+//            if (delayTimer > 0) {
+//                delayTimer = (byte) (byte2Ui(delayTimer) - 1);
+//            }
+//        }
+//    }
 
 
     public void loadROM(String romFileName) throws IOException {
