@@ -10,9 +10,9 @@ With language I know jackshit about: Java.
 - https://github.com/Timendus/chip8-test-suite
 
 ## Known Problems
-- Keypad input hasn't worked properly yet
+- Keypad input hasn't worked properly yet for most ROMs, but okay for ROM "Keypad Test [Hap, 2006].ch8"
 
 ## Todos:
-- Fixed framerate
+- ~~Fixed framerate~~
 - Load ROM graphical interface
-- Emulator state display (registry, etc)
+- Emulator state display (registry, stack memory, etc)
