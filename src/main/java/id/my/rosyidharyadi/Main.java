@@ -6,7 +6,6 @@ import id.my.rosyidharyadi.Model.Keyboard;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -40,16 +39,17 @@ public class Main {
 //        romFile = "roms/IBM Logo.ch8";
 //        romFile = "roms/1-chip8-logo.ch8";
 //        romFile = "roms/4-flags.ch8";
-//        romFile = "roms/6-keypad.ch8";
+        romFile = "roms/6-keypad.ch8";
 //        romFile = "roms/delay_timer_test.ch8";
 //        romFile = "roms/Life [GV Samways, 1980].ch8";
 //        todo comment, only for testing
-        romFile = "roms/Keypad Test [Hap, 2006].ch8";
+//        romFile = "roms/Keypad Test [Hap, 2006].ch8";
+//        romFile = "roms/TANK";
 
         cpu.loadROM(romFile);
         long lastTime = System.nanoTime();
-        final double FRAME_RATE_CAP = 1000;
-        double ns = 1000000000 / FRAME_RATE_CAP;
+        final double CLOCK_RATE = 60;
+        double ns = 1000000000 / CLOCK_RATE;
         double delta = 0;
         long timer = System.currentTimeMillis();
         while (true) {

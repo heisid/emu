@@ -26,7 +26,7 @@ public class CPU {
 
     private byte[] graphicBuffer = new byte[DISPLAY_ROW_NUM * DISPLAY_COL_NUM];
 
-    private final Keyboard keyboard;
+    private Keyboard keyboard;
 
 
     public CPU(Keyboard keyboard) {
@@ -60,24 +60,23 @@ public class CPU {
         TimerTask task = new TimerTask() {
             public void run() {
                 if (soundTimer > 0) {
-                    soundTimer = (byte) (byte2Ui(soundTimer) - 1);
+                    soundTimer = byteFromUi(byte2Ui(soundTimer) - 1);
                 }
                 if (delayTimer > 0) {
-                    delayTimer = (byte) (byte2Ui(delayTimer) - 1);
+                    delayTimer = byteFromUi(byte2Ui(delayTimer) - 1);
                 }
             }
         };
         Timer timer = new Timer("Timer");
 
         long interval = 1000L / 60;
-        timer.scheduleAtFixedRate(task, 0, interval);
+        timer.scheduleAtFixedRate(task, interval, interval);
     }
 
 
     public void run() {
         short opcode = fetch();
         decodeExecute(opcode);
-//        timerUpdate();
     }
 
 

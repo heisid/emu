@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static java.util.Map.entry;
 
@@ -46,10 +48,17 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        keyBeingPressed = -1;
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                keyBeingPressed = -1;
+            }
+        };
+        Timer timer = new Timer("Timer_Keyboard_Release");
+        timer.schedule(task, 10);
     }
 
-    public Integer getKeyBeingPressed() {
+    public int getKeyBeingPressed() {
         return keyBeingPressed;
     }
 }
