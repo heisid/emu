@@ -29,12 +29,13 @@ public class Main {
         CPU cpu = new CPU(keyboard);
 
         String romFile = "";
-        try {
-            romFile = args[0];
-        } catch(ArrayIndexOutOfBoundsException e) {
-            System.out.println("No ROM file provided. Exiting...");
-            System.exit(1);
-        }
+//        todo uncomment
+//        try {
+//            romFile = args[0];
+//        } catch(ArrayIndexOutOfBoundsException e) {
+//            System.out.println("No ROM file provided. Exiting...");
+//            System.exit(1);
+//        }
 //        romFile = "roms/1-chip8-logo.ch8";
 //        romFile = "roms/IBM Logo.ch8";
 //        romFile = "roms/1-chip8-logo.ch8";
@@ -42,15 +43,27 @@ public class Main {
 //        romFile = "roms/6-keypad.ch8";
 //        romFile = "roms/delay_timer_test.ch8";
 //        romFile = "roms/Life [GV Samways, 1980].ch8";
-//        romFile = "roms/Keypad Test [Hap, 2006].ch8";
+//        todo comment, only for testing
+        romFile = "roms/Keypad Test [Hap, 2006].ch8";
 
         cpu.loadROM(romFile);
-        long delay = 1000L / 500L;
+        long lastTime = System.nanoTime();
+        final double FRAME_RATE_CAP = 1000;
+        double ns = 1000000000 / FRAME_RATE_CAP;
+        double delta = 0;
+        long timer = System.currentTimeMillis();
         while (true) {
-            TimeUnit time = TimeUnit.MILLISECONDS;
-            cpu.run();
-            display.setDataArray(cpu.getGraphicBuffer());
-            time.sleep(delay);
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+            while (delta >= 1) {
+                cpu.run();
+                display.setDataArray(cpu.getGraphicBuffer());
+                delta--;
+            }
+            if (System.currentTimeMillis() - timer > 1000) {
+                timer += 1000;
+            }
         }
     }
 }
